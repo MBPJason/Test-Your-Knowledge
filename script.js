@@ -44,7 +44,7 @@ var questions = [
   "This is question 2",
   "This is question 3",
   "This is question 4",
-  "This is question 5"
+  "This is question 5",
 ];
 
 var counter = 0;
@@ -67,6 +67,10 @@ function startQuiz() {
   makeButton.setAttribute("id", "quizStart");
   userChoice.appendChild(makeButton);
   console.log("Start Quiz is reading");
+}
+
+function enterHighScore() {
+  console.log("Enter High Score function is reading");
 }
 
 function quizInProgress() {
@@ -112,25 +116,30 @@ var buttonCheck = userChoice.addEventListener("click", function (event) {
       setTime();
     }
 
-    if (whichChoice === "0") {
-      console.log("You clicked an answer button");
-      counter++;
-      quizInProgress();
-    }
-    if (whichChoice === "1") {
-      console.log("You clicked an answer button");
-      counter++;
-      quizInProgress();
-    }
-    if (whichChoice === "2") {
-      console.log("You clicked an answer button");
-      counter++;
-      quizInProgress();
-    }
-    if (whichChoice === "3") {
-      console.log("You clicked an answer button");
-      counter++;
-      quizInProgress();
+    if (counter >= 4) {
+      enterHighScore();
+      console.log("You met the end correctly");
+    } else {
+      if (whichChoice === "0") {
+        console.log("You clicked an answer button");
+        counter++;
+        quizInProgress();
+      }
+      if (whichChoice === "1") {
+        console.log("You clicked an answer button");
+        counter++;
+        quizInProgress();
+      }
+      if (whichChoice === "2") {
+        console.log("You clicked an answer button");
+        counter++;
+        quizInProgress();
+      }
+      if (whichChoice === "3") {
+        console.log("You clicked an answer button");
+        counter++;
+        quizInProgress();
+      }
     }
   }
 });
