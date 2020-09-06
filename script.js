@@ -3,36 +3,36 @@ var result = document.getElementById("result");
 var timer = document.getElementById("timer");
 var userChoice = document.getElementById("buttonGroup");
 var makeButton = document.createElement("button");
-// var answers = userChoice.children;
+var answers = userChoice.children;
 
 var secondsLeft = 60;
 var answerKey = [
   {
-    answer1: "Answer 1",
+    answer1: "Hey ",
     answer2: "Answer 2",
     answer3: "Answer 3",
     answer4: "Answer 4",
   },
   {
-    answer1: "Answer 1",
+    answer1: "There",
     answer2: "Answer 2",
     answer3: "Answer 3",
     answer4: "Answer 4",
   },
   {
-    answer1: "Answer 1",
+    answer1: "What",
     answer2: "Answer 2",
     answer3: "Answer 3",
     answer4: "Answer 4",
   },
   {
-    answer1: "Answer 1",
+    answer1: "is",
     answer2: "Answer 2",
     answer3: "Answer 3",
     answer4: "Answer 4",
   },
   {
-    answer1: "Answer 1",
+    answer1: "up",
     answer2: "Answer 2",
     answer3: "Answer 3",
     answer4: "Answer 4",
@@ -44,6 +44,7 @@ var questions = [
   "This is question 2",
   "This is question 3",
   "This is question 4",
+  "This is question 5"
 ];
 
 var counter = 0;
@@ -69,7 +70,11 @@ function startQuiz() {
 }
 
 function quizInProgress() {
-  userChoice.removeChild(userChoice.childNodes[0]);
+  userQuestion.innerHTML = questions[counter];
+  answers[0].innerHTML = answerKey[counter].answer1;
+  answers[1].innerHTML = answerKey[counter].answer2;
+  answers[2].innerHTML = answerKey[counter].answer3;
+  answers[3].innerHTML = answerKey[counter].answer4;
   console.log("quizInProgress is reading");
 }
 
@@ -98,24 +103,37 @@ var buttonCheck = userChoice.addEventListener("click", function (event) {
       btn3.setAttribute("id", "3");
 
       userChoice.removeChild(userChoice.childNodes[0]);
+      userChoice.removeChild(userChoice.childNodes[0]);
       userChoice.appendChild(btn0);
       userChoice.appendChild(btn1);
       userChoice.appendChild(btn2);
       userChoice.appendChild(btn3);
       quizInProgress();
+      setTime();
     }
 
-    if (whichChoice === "btn1") {
+    if (whichChoice === "0") {
       console.log("You clicked an answer button");
+      counter++;
+      quizInProgress();
+    }
+    if (whichChoice === "1") {
+      console.log("You clicked an answer button");
+      counter++;
+      quizInProgress();
+    }
+    if (whichChoice === "2") {
+      console.log("You clicked an answer button");
+      counter++;
+      quizInProgress();
+    }
+    if (whichChoice === "3") {
+      console.log("You clicked an answer button");
+      counter++;
+      quizInProgress();
     }
   }
 });
-
-// function appendChildren(parent, children) {
-//   children.forEach(function (child) {
-//     parent.appendChild(child);
-//   });
-// }
 
 startQuiz();
 document.addEventListener("click", buttonCheck);
