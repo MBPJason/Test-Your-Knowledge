@@ -5,9 +5,17 @@ var userChoice = document.getElementById("buttonGroup");
 var rightWrong = document.getElementById("rightWrong");
 var makeButton = document.createElement("button");
 var answers = userChoice.children;
+var display = rightWrong.children;
 
+
+// Start of Global number variables to increase or decrease
 var secondsLeft = 60;
-var textGoAway = 2;
+var textGoAway = 1;
+var score = 0;
+var counter = 0;
+// End of Global number variables to increase or decrease
+
+// Start of Arrays and Objects to be referenced
 var answerKey = [
   {
     answer1: "Hey ",
@@ -51,9 +59,12 @@ var questions = [
 
 var answerChoice = [];
 var correctAnswers = [0, 3, 1, 1, 2];
+// End of Arrays and Objects to be referenced
 
-var counter = 0;
 
+
+
+// Start of Interval Timer Functions
 function setTime() {
   var timerInterval = setInterval(function () {
     secondsLeft--;
@@ -69,6 +80,21 @@ function setTime() {
   }, 1000);
 }
 
+function disappear() {
+  var goAway = setInterval(function () {
+    textGoAway--;
+    if (textGoAway === 0) {
+      display[1].textContent = "";
+      display[0].style.opacity = "0";
+
+      clearInterval(goAway);
+    }
+  }, 1000);
+}
+// End of Interval Timer Functions
+
+
+// Start of Quiz Prompts
 function startQuiz() {
   userQuestion.innerHTML = "This is the quiz starting";
   result.innerHTML = "This is me explaining what you have to do for the quiz";
@@ -90,18 +116,6 @@ function quizInProgress() {
 function rightOrWrong() {
   console.log("Right or Wrong function is reading");
   if (counter <= 4) {
-    function disappear() {
-      var goAway = setInterval(function () {
-        console.log(textGoAway);
-        textGoAway--;
-        if (textGoAway === 0) {
-
-            pTag.textContent = "";
-          clearInterval(goAway);
-        }
-      }, 1000);
-    }
-
     if (
       (counter - 1 === 0 && answerChoice[0] == correctAnswers[0]) ||
       (counter - 1 === 1 && answerChoice[1] == correctAnswers[1]) ||
@@ -109,9 +123,14 @@ function rightOrWrong() {
       (counter - 1 === 3 && answerChoice[3] == correctAnswers[3]) ||
       (counter - 1 === 4 && answerChoice[4] == correctAnswers[4])
     ) {
+      display[0].style.opacity = "0.7";
+      display[1].textContent = "Correct";
       console.log("right");
+      score += 20;
       disappear();
     } else {
+      display[0].style.opacity = "0.7";
+      display[1].textContent = "Wrong";
       console.log("wrong");
       secondsLeft -= 10;
       disappear();
@@ -122,7 +141,11 @@ function rightOrWrong() {
 function enterHighScore() {
   console.log("Enter High Score function is reading");
 }
+// End of Quiz Prompts
 
+
+
+// Start of Event Listeners
 var buttonCheck = userChoice.addEventListener("click", function (event) {
   var buttons = event.target;
   if (buttons.matches("button")) {
@@ -137,7 +160,7 @@ var buttonCheck = userChoice.addEventListener("click", function (event) {
       var btn2 = document.createElement("button");
       var btn3 = document.createElement("button");
       var hr = document.createElement("hr");
-    var pTag = document.createElement("p");
+      var pTag = document.createElement("p");
 
       btn0.innerHTML = questions[0];
       btn1.innerHTML = questions[1];
@@ -148,12 +171,15 @@ var buttonCheck = userChoice.addEventListener("click", function (event) {
       btn1.setAttribute("id", "1");
       btn2.setAttribute("id", "2");
       btn3.setAttribute("id", "3");
+      hr.style.opacity = "0";
 
       userChoice.removeChild(userChoice.children[0]);
       userChoice.appendChild(btn0);
       userChoice.appendChild(btn1);
       userChoice.appendChild(btn2);
       userChoice.appendChild(btn3);
+      rightWrong.appendChild(hr);
+      rightWrong.appendChild(pTag);
       quizInProgress();
       setTime();
     }
@@ -193,6 +219,9 @@ var buttonCheck = userChoice.addEventListener("click", function (event) {
     }
   }
 });
+// End of Event Listeners
 
+
+// Functions to be Executed on page startup
 startQuiz();
 document.addEventListener("click", buttonCheck);
