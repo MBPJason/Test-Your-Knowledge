@@ -2,10 +2,12 @@ var userQuestion = document.getElementById("questions");
 var result = document.getElementById("result");
 var timer = document.getElementById("timer");
 var userChoice = document.getElementById("buttonGroup");
+var rightWrong = document.getElementById("rightWrong");
 var makeButton = document.createElement("button");
 var answers = userChoice.children;
 
 var secondsLeft = 60;
+var textGoAway = 2;
 var answerKey = [
   {
     answer1: "Hey ",
@@ -47,6 +49,9 @@ var questions = [
   "This is question 5",
 ];
 
+var answerChoice = [];
+var correctAnswers = [0, 3, 1, 1, 2];
+
 var counter = 0;
 
 function setTime() {
@@ -55,6 +60,10 @@ function setTime() {
     timer.textContent = "Timer: " + secondsLeft;
 
     if (secondsLeft === 0) {
+      clearInterval(timerInterval);
+    }
+    if (counter >= 4) {
+      timer.textContent = "";
       clearInterval(timerInterval);
     }
   }, 1000);
@@ -66,11 +75,7 @@ function startQuiz() {
   makeButton.textContent = "Start Quiz";
   makeButton.setAttribute("id", "quizStart");
   userChoice.appendChild(makeButton);
-  console.log("Start Quiz is reading");
-}
-
-function enterHighScore() {
-  console.log("Enter High Score function is reading");
+  console.log("Start Quiz Function is reading");
 }
 
 function quizInProgress() {
@@ -80,6 +85,42 @@ function quizInProgress() {
   answers[2].innerHTML = answerKey[counter].answer3;
   answers[3].innerHTML = answerKey[counter].answer4;
   console.log("quizInProgress is reading");
+}
+
+function rightOrWrong() {
+  console.log("Right or Wrong function is reading");
+  if (counter <= 4) {
+    function disappear() {
+      var goAway = setInterval(function () {
+        console.log(textGoAway);
+        textGoAway--;
+        if (textGoAway === 0) {
+
+            pTag.textContent = "";
+          clearInterval(goAway);
+        }
+      }, 1000);
+    }
+
+    if (
+      (counter - 1 === 0 && answerChoice[0] == correctAnswers[0]) ||
+      (counter - 1 === 1 && answerChoice[1] == correctAnswers[1]) ||
+      (counter - 1 === 2 && answerChoice[2] == correctAnswers[2]) ||
+      (counter - 1 === 3 && answerChoice[3] == correctAnswers[3]) ||
+      (counter - 1 === 4 && answerChoice[4] == correctAnswers[4])
+    ) {
+      console.log("right");
+      disappear();
+    } else {
+      console.log("wrong");
+      secondsLeft -= 10;
+      disappear();
+    }
+  }
+}
+
+function enterHighScore() {
+  console.log("Enter High Score function is reading");
 }
 
 var buttonCheck = userChoice.addEventListener("click", function (event) {
@@ -95,6 +136,8 @@ var buttonCheck = userChoice.addEventListener("click", function (event) {
       var btn1 = document.createElement("button");
       var btn2 = document.createElement("button");
       var btn3 = document.createElement("button");
+      var hr = document.createElement("hr");
+    var pTag = document.createElement("p");
 
       btn0.innerHTML = questions[0];
       btn1.innerHTML = questions[1];
@@ -106,8 +149,7 @@ var buttonCheck = userChoice.addEventListener("click", function (event) {
       btn2.setAttribute("id", "2");
       btn3.setAttribute("id", "3");
 
-      userChoice.removeChild(userChoice.childNodes[0]);
-      userChoice.removeChild(userChoice.childNodes[0]);
+      userChoice.removeChild(userChoice.children[0]);
       userChoice.appendChild(btn0);
       userChoice.appendChild(btn1);
       userChoice.appendChild(btn2);
@@ -123,22 +165,30 @@ var buttonCheck = userChoice.addEventListener("click", function (event) {
       if (whichChoice === "0") {
         console.log("You clicked an answer button");
         counter++;
+        answerChoice.push(0);
         quizInProgress();
+        rightOrWrong();
       }
       if (whichChoice === "1") {
         console.log("You clicked an answer button");
         counter++;
+        answerChoice.push(1);
         quizInProgress();
+        rightOrWrong();
       }
       if (whichChoice === "2") {
         console.log("You clicked an answer button");
         counter++;
+        answerChoice.push(2);
         quizInProgress();
+        rightOrWrong();
       }
       if (whichChoice === "3") {
         console.log("You clicked an answer button");
         counter++;
+        answerChoice.push(3);
         quizInProgress();
+        rightOrWrong();
       }
     }
   }
