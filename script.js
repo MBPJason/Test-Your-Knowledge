@@ -3,14 +3,15 @@ var result = document.getElementById("result");
 var timer = document.getElementById("timer");
 var userChoice = document.getElementById("buttonGroup");
 var rightWrong = document.getElementById("rightWrong");
+var form = document.getElementById("form");
 var makeButton = document.createElement("button");
 var answers = userChoice.children;
 var display = rightWrong.children;
-
+var initialsInput = form.children;
 
 // Start of Global number variables to increase or decrease
 var secondsLeft = 60;
-var textGoAway = 1;
+var textGoAway = 3;
 var score = 0;
 var counter = 0;
 // End of Global number variables to increase or decrease
@@ -59,10 +60,9 @@ var questions = [
 
 var answerChoice = [];
 var correctAnswers = [0, 3, 1, 1, 2];
+var leaderBoard = [];
+
 // End of Arrays and Objects to be referenced
-
-
-
 
 // Start of Interval Timer Functions
 function setTime() {
@@ -72,10 +72,12 @@ function setTime() {
 
     if (secondsLeft === 0) {
       clearInterval(timerInterval);
+      //   secondsLeft += 60;
     }
     if (counter >= 4) {
       timer.textContent = "";
       clearInterval(timerInterval);
+      //   secondsLeft = 60;
     }
   }, 1000);
 }
@@ -83,16 +85,17 @@ function setTime() {
 function disappear() {
   var goAway = setInterval(function () {
     textGoAway--;
+    console.log(textGoAway);
     if (textGoAway === 0) {
       display[1].textContent = "";
       display[0].style.opacity = "0";
 
       clearInterval(goAway);
+      textGoAway += 3;
     }
-  }, 1000);
+  }, 500);
 }
 // End of Interval Timer Functions
-
 
 // Start of Quiz Prompts
 function startQuiz() {
@@ -139,11 +142,57 @@ function rightOrWrong() {
 }
 
 function enterHighScore() {
+  if (counter >= 4) {
+    for (i = 0; i < 4; i++) {
+      userChoice.removeChild(userChoice.children[0]);
+    }
+
+    var input = document.createElement("input");
+
+    makeButton.innerHTML = "Submit";
+    makeButton.setAttribute("type", "submit");
+    makeButton.setAttribute("id", "submit");
+    input.setAttribute("type", "text");
+    input.setAttribute("maxlength", "2");
+    input.setAttribute("id", "initials");
+    input.setAttribute("class", "mx-1 ");
+
+    form.innerHTML = "Enter Initials:";
+    form.appendChild(input);
+    form.appendChild(makeButton);
+
+    userQuestion.innerHTML = "All done";
+    result.innerHTML = "Your final score is " + score;
+  }
   console.log("Enter High Score function is reading");
 }
+
+function makeLeaderBoard() {
+    console.log("Make Leader Board is reading");
+    localStorage.setItem("Highscore List", JSON.stringify(leaderBoard));
+};
+
 // End of Quiz Prompts
-
-
+var displayLeaderBoard = form.addEventListener("click", function (event) {
+  var initialsSubmission = event.target;
+  if (initialsSubmission.matches("button")) {
+    event.preventDefault();
+    var inputCheck = document.getElementById("initials");
+    var initials = inputCheck.value;
+    if (initials == "") {
+      console.log("Check works. This is the agree part");
+    } else {
+      var player = {
+        name: initials,
+        score: score,
+      };
+      leaderBoard.push(player);
+      makeLeaderBoard();
+      console.log("Check works. This is the disagree part");
+      console.log(leaderBoard);
+    }
+  }
+});
 
 // Start of Event Listeners
 var buttonCheck = userChoice.addEventListener("click", function (event) {
@@ -186,6 +235,7 @@ var buttonCheck = userChoice.addEventListener("click", function (event) {
 
     if (counter >= 4) {
       enterHighScore();
+      event.preventDefault();
       console.log("You met the end correctly");
     } else {
       if (whichChoice === "0") {
@@ -219,9 +269,10 @@ var buttonCheck = userChoice.addEventListener("click", function (event) {
     }
   }
 });
+
 // End of Event Listeners
 
-
-// Functions to be Executed on page startup
+// Functions to be executed or waiting to be on page startup
 startQuiz();
 document.addEventListener("click", buttonCheck);
+document.addEventListener("click", displayLeaderBoard);
