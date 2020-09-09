@@ -4,10 +4,12 @@ var timer = document.getElementById("timer");
 var userChoice = document.getElementById("buttonGroup");
 var rightWrong = document.getElementById("rightWrong");
 var form = document.getElementById("form");
+var scoreList = document.getElementById("highScore");
 var makeButton = document.createElement("button");
 var answers = userChoice.children;
 var display = rightWrong.children;
 var initialsInput = form.children;
+var theList = scoreList.children;
 
 // Start of Global number variables to increase or decrease
 var secondsLeft = 60;
@@ -61,6 +63,7 @@ var questions = [
 var answerChoice = [];
 var correctAnswers = [0, 3, 1, 1, 2];
 var leaderBoard = [];
+var storageGrab = JSON.parse(localStorage.getItem("Highscore List"));
 
 // End of Arrays and Objects to be referenced
 
@@ -117,6 +120,7 @@ function quizInProgress() {
 }
 
 function rightOrWrong() {
+  
   console.log("Right or Wrong function is reading");
   if (counter <= 4) {
     if (
@@ -168,39 +172,48 @@ function enterHighScore() {
 }
 
 function makeLeaderBoard() {
-  console.log("Make Leader Board is reading");
+  clearScreen();
+
+  // if (leaderBoard !== storageGrab) {
+  //   leaderBoard = storageGrab;
+  // }
+  var h2El = document.createElement("h2");
+  var ulEl = document.createElement("ul");
+  h2El.textContent = "Highscore List";
+  h2El.className = "text-align-center";
+  scoreList.append(h2El);
+  scoreList.append(ulEl);
+  for (i = 0; i < leaderBoard.length; i++) {
+    var hsListItem = document.createElement("li");
+    hsListItem.textContent = leaderBoard[i].name + "   " + leaderBoard[i].score;
+    scoreList.append(hsListItem);
+  }
+  
+}
+
+function clearScreen() {
+  userQuestion.textContent = "";
+  result.textContent = "";
+  if (answers.length > 0) {
+    for (i = 0; i < 4; i++) {
+      userChoice.removeChild(userChoice.children[0]);
+    }
+  }; 
+  if (initialsInput.length > 0) {
+    initialsInput.textContent = "";
+    for (i = 0; i < initialsInput.length; i++) {
+      form.removeChild(form.children[0]);
+    }
+  };
+  if (theList.length > 0) {
+    for (i = 0; i < theList.length; i++) {
+      scoreList.removeChild(scoreList.children[0]);
+    }
+  };
 }
 
 // End of Quiz Prompts
-var displayLeaderBoard = form.addEventListener("click", function (event) {
-  var initialsSubmission = event.target;
-  if (initialsSubmission.matches("button")) {
-    event.preventDefault();
-    var inputCheck = document.getElementById("initials");
-    var initials = inputCheck.value;
-    if (initials == "") {
-      console.log("Check works. This is the agree part");
-    } else {
-      var player = {
-        name: initials,
-        score: score,
-      };
 
-      if (JSON.parse(localStorage.getItem("Highscore List")) === null) {
-        console.log("There is nothing in storage");
-        leaderBoard.push(player);
-        localStorage.setItem("Highscore List", JSON.stringify(leaderBoard));
-      } else {
-        leaderBoard = JSON.parse(localStorage.getItem("Highscore List"));
-        leaderBoard.push(player);
-        localStorage.setItem("Highscore List", JSON.stringify(leaderBoard));
-        console.log("There is an item in storage");
-      }
-      console.log("Check works. This is the disagree part");
-      console.log(leaderBoard);
-    }
-  }
-});
 
 // Start of Event Listeners
 var buttonCheck = userChoice.addEventListener("click", function (event) {
@@ -243,7 +256,6 @@ var buttonCheck = userChoice.addEventListener("click", function (event) {
 
     if (counter >= 4) {
       enterHighScore();
-      event.preventDefault();
       console.log("You met the end correctly");
     } else {
       if (whichChoice === "0") {
@@ -278,6 +290,38 @@ var buttonCheck = userChoice.addEventListener("click", function (event) {
   }
 });
 
+var displayLeaderBoard = form.addEventListener("click", function (event) {
+  var initialsSubmission = event.target;
+  if (initialsSubmission.matches("button")) {
+    event.preventDefault();
+    var inputCheck = document.getElementById("initials");
+    var initials = inputCheck.value;
+    if (initials == "") {
+      alert("Please enter your Initials")
+      console.log("Check works. This is the agree part");
+    } else {
+      var player = {
+        name: initials,
+        score: score,
+      };
+
+      if (JSON.parse(localStorage.getItem("Highscore List")) === null) {
+        console.log("There is nothing in storage");
+        leaderBoard.push(player);
+        localStorage.setItem("Highscore List", JSON.stringify(leaderBoard));
+        makeLeaderBoard();
+      } else {
+        leaderBoard = JSON.parse(localStorage.getItem("Highscore List"));
+        leaderBoard.push(player);
+        localStorage.setItem("Highscore List", JSON.stringify(leaderBoard));
+        makeLeaderBoard();
+        console.log("There is an item in storage");
+      }
+      console.log("Check works. This is the disagree part");
+      console.log(leaderBoard);
+    }
+  }
+});
 // End of Event Listeners
 
 // Functions to be executed or waiting to be on page startup
