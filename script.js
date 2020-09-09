@@ -168,9 +168,8 @@ function enterHighScore() {
 }
 
 function makeLeaderBoard() {
-    console.log("Make Leader Board is reading");
-    localStorage.setItem("Highscore List", JSON.stringify(leaderBoard));
-};
+  console.log("Make Leader Board is reading");
+}
 
 // End of Quiz Prompts
 var displayLeaderBoard = form.addEventListener("click", function (event) {
@@ -186,8 +185,17 @@ var displayLeaderBoard = form.addEventListener("click", function (event) {
         name: initials,
         score: score,
       };
-      leaderBoard.push(player);
-      makeLeaderBoard();
+
+      if (JSON.parse(localStorage.getItem("Highscore List")) === null) {
+        console.log("There is nothing in storage");
+        leaderBoard.push(player);
+        localStorage.setItem("Highscore List", JSON.stringify(leaderBoard));
+      } else {
+        leaderBoard = JSON.parse(localStorage.getItem("Highscore List"));
+        leaderBoard.push(player);
+        localStorage.setItem("Highscore List", JSON.stringify(leaderBoard));
+        console.log("There is an item in storage");
+      }
       console.log("Check works. This is the disagree part");
       console.log(leaderBoard);
     }
