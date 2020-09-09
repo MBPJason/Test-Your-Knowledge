@@ -186,7 +186,7 @@ function makeLeaderBoard() {
   for (i = 0; i < leaderBoard.length; i++) {
     var hsListItem = document.createElement("li");
     hsListItem.textContent = leaderBoard[i].name + "   " + leaderBoard[i].score;
-    scoreList.append(hsListItem);
+    ulEl.append(hsListItem);
   }
   
 }
@@ -200,7 +200,7 @@ function clearScreen() {
     }
   }; 
   if (initialsInput.length > 0) {
-    initialsInput.textContent = "";
+    form.textContent = "";
     for (i = 0; i < initialsInput.length; i++) {
       form.removeChild(form.children[0]);
     }
