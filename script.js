@@ -358,9 +358,7 @@ var reset = scoreList.addEventListener("click", function (event) {
       startQuiz();
     } else {
       console.log("Wow you really just did that");
-      // resetLeaderBoard();
-      //   leaderBoard.clear()
-      //   makeLeaderBoard
+        leaderBoard.clear();
     }
   }
 });
